@@ -591,7 +591,7 @@ public class XApiToCaliperConversionService {
     if (StringUtils.isNotBlank(action)) {
       XApiVerb xapiVerb = new XApiVerb();
       xapiVerb.setId(caliperActionToXapiVerb(action));
-      statement.setVerb(xapiVerb);
+      xapiVerb.setId(action);
     }
     // ACTION END
     
