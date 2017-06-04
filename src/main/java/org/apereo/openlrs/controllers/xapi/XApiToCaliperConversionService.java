@@ -293,7 +293,7 @@ public class XApiToCaliperConversionService {
     XApiVerb xapiVerb = statement.getVerb();
     if (xapiVerb != null) {
       String verbId = xapiVerb.getId();
-      caliperAction = xApiVerbToCaliperAction(verbId);
+      caliperAction = verbId;
     }
     // ACTION END
     
@@ -590,8 +590,8 @@ public class XApiToCaliperConversionService {
     String action = event.getAction();
     if (StringUtils.isNotBlank(action)) {
       XApiVerb xapiVerb = new XApiVerb();
-      xapiVerb.setId(caliperActionToXapiVerb(action));
       xapiVerb.setId(action);
+      statement.setVerb(xapiVerb);
     }
     // ACTION END
     

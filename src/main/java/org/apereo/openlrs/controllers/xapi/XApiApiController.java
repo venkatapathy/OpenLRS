@@ -23,6 +23,7 @@ import org.apereo.openlrs.model.xapi.StatementResult;
 import org.apereo.openlrs.storage.Reader;
 import org.apereo.openlrs.storage.Writer;
 import org.apereo.openlrs.utils.AuthorizationUtils;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.amazonaws.util.json.JSONArray;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.net.MediaType;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 /**
  * @author ggilbert
@@ -56,8 +63,8 @@ public class XApiApiController {
   
   @RequestMapping(value = { "", "/" }, 
       method = RequestMethod.POST, 
-      consumes = "application/json", produces = "application/json;charset=utf-8")
-  public List<String> postStatement(@RequestBody String json, @RequestHeader(value="Authorization") String authorizationHeader)
+      consumes = "application/json", produces=org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
+  public String postStatement(@RequestBody String json, @RequestHeader(value="Authorization") String authorizationHeader)
       throws InvalidXAPIRequestException {
     List<String> ids = null;
     String key = AuthorizationUtils.getKeyFromHeader(authorizationHeader);
@@ -119,7 +126,10 @@ public class XApiApiController {
       throw new InvalidXAPIRequestException("Missing Authorization Header");
     }
 
-    return ids;
+    JsonArray arr=new JsonArray();
+    JsonPrimitive idPrem=new JsonPrimitive(ids.get(0));
+    arr.add(idPrem);
+  return arr.toString();		
   }
   
   @RequestMapping(method = RequestMethod.GET, produces = "application/json;charset=utf-8")
